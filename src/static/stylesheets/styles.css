@@ -1,3 +1,22 @@
 body {
   background: gold;
 }
+img {
+  width: 200px;
+  height: 133px;
+}
+#navbar, #main-content {
+  display: block;
+  position: relative;
+}
+#navbar {
+  height: 2rem;
+}
+#appname {
+  float: left;
+  margin-left: 6rem;
+}
+#login {
+  float: right;
+  margin-right: 6rem;
+}
