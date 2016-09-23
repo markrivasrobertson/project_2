@@ -33,7 +33,7 @@ class Login extends React.Component {
         console.log('login successful')
       })
       .then(() => {
-        this.props.router.push('/');
+        this.props.router.push('/users');
       });
   }
   handleRegister(e) {

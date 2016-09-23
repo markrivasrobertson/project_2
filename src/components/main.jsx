@@ -1,10 +1,24 @@
+import { withRouter } from 'react-router';
 import React from 'react';
+import firebase from '../../firebase.config.js';
 
 const propTypes = {
   children: React.PropTypes.element.isRequired,
 };
 
 class Main extends React.Component {
+  constructor() {
+    super();
+    this.signOut = this.signOut.bind(this);
+  }
+  signOut() {
+    firebase.auth().signOut().then(() => {
+      console.log('signed out successfully')
+    })
+    .then(() => {
+      this.props.router.push('/');
+    });
+  }
   render() {
     return (
       <div>
@@ -15,6 +29,7 @@ class Main extends React.Component {
         <div id="main-content">
           {this.props.children}
         </div>
+        <button onClick={this.signOut}>Sign Out</button>
       </div>
     );
   }
@@ -22,4 +37,4 @@ class Main extends React.Component {
 
 Main.propTypes = propTypes;
 
-export default Main;
+export default withRouter(Main);
