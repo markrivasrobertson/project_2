@@ -20,6 +20,8 @@ class Main extends React.Component {
     });
   }
   render() {
+    if (firebase.auth().currentUser) {
+    }
     return (
       <div>
         <div id="navbar">
@@ -29,7 +31,6 @@ class Main extends React.Component {
         <div id="main-content">
           {this.props.children}
         </div>
-        <button onClick={this.signOut}>Sign Out</button>
       </div>
     );
   }
