@@ -2,6 +2,7 @@ import request from 'superagent';
 import React from 'react';
 import Post from './post.jsx';
 import PostList from './postlist.jsx';
+import firebase from '../../firebase.config.js';
 // const propTypes = {
   // users: React.PropTypes.array.isRequired,
   // message: React.PropTypes.string.isRequired,
@@ -106,6 +107,7 @@ class GroupView extends React.Component {
     this.getPosts();
   }
   render() {
+    console.log(firebase.auth().currentUser.uid);
     const displayedProfiles = this.state.users.map((obj, idx) => {
       const individualName = obj.user;
       const individualRemaining = obj.remaining;
