@@ -8,5 +8,14 @@ function requireAuth(nextState, replace) {
     });
   }
 }
+function acceptAuth(nextState, replace) {
+  if (firebase.auth().currentUser !== null) {
+    replace({
+      pathname: '/users',
+      state: { nextPathname: nextState.location.pathname },
+    });
+  }
+}
 
 module.exports = requireAuth;
+module.exports = acceptAuth;
