@@ -1,7 +1,7 @@
-import React from 'react';
-import firebase from '../../firebase.config.js';
 import request from 'superagent';
-
+import React from 'react';
+import Post from './post.jsx';
+import PostList from './postlist.jsx';
 // const propTypes = {
   // users: React.PropTypes.array.isRequired,
   // message: React.PropTypes.string.isRequired,
@@ -12,14 +12,23 @@ class GroupView extends React.Component {
     super();
     this.state = {
       users: [],
+      posts: [],
     };
+    this.handlePublish = this.handlePublish.bind(this);
+    this.updatePost = this.updatePost.bind(this);
+    this.deletePost = this.deletePost.bind(this);
+    this.publishPost = this.publishPost.bind(this);
     this.getUsers = this.getUsers.bind(this);
+    this.consoler = this.consoler.bind(this);
   }
   componentWillMount() {
     console.log('component pre mounting');
     setTimeout(() => {
       this.getUsers();
     });
+  }
+  consoler() {
+    console.log('clickety');
   }
   getUsers() {
     console.log('get users called');
@@ -29,45 +38,101 @@ class GroupView extends React.Component {
       const userData = response.body;
       if (userData) {
         users = Object.keys(userData).map((id) => {
-          // const individualUser = userData[id].user_name;
           return {
-            // user: individualUser,
             user: userData[id].user_name,
-            remaining: userData[id].remaining.length,
+            remaining: userData[id].remaining,
           };
         });
       }
-      this.setState({ users: users, });
+      this.setState({ users: users });
     });
   }
+  handlePublish({ id, content, author }) {
+    console.log('handle publish called');
+    if (id) {
+      this.updatePost({ id, content, author });
+    } else {
+      this.publishPost({ content, author });
+    }
+  }
+  updatePost({ id, content, author }) {
+    console.log('updatePost called');
+    const url = `https://license-plate-scavenger-hunt.firebaseio.com/posts/${id}.json`;
+    request.patch(url)
+      .send({ content, author })
+      .then(() => {
+        this.getPosts();
+      });
+  }
+  deletePost(id) {
+    console.log('deletePost called');
+    const url = `https://license-plate-scavenger-hunt.firebaseio.com/posts/${id}.json`;
+    console.log(url);
+    request.del(url)
+      .then(() => {
+        this.getPosts();
+      });
+  }
+  publishPost({ content, author }) {
+    console.log('publishPost called');
+    const url = 'https://license-plate-scavenger-hunt.firebaseio.com/posts/.json';
+    request.post(url)
+      .send({ content, author })
+      .then(() => {
+        this.getPosts();
+      });
+  }
+  getPosts() {
+    console.log('getPosts called');
+    const url = 'https://license-plate-scavenger-hunt.firebaseio.com/posts/.json';
+    request.get(url)
+      .then((response) => {
+        const postsData = response.body;
+        let posts = [];
+        if (postsData) {
+          posts = Object.keys(postsData).map((id) => {
+            const individualPostData = postsData[id];
+            return {
+              id: id,
+              author: individualPostData.author,
+              content: individualPostData.content,
+            };
+          });
+        }
+        this.setState({ posts: posts });
+      });
+  }
   componentDidMount() {
-    // this.getUsers();
-    console.log('component mounted');
+    this.getPosts();
   }
   render() {
-    // const userNames = [];
-    // const userArray = this.state.users;
-    // const userNameList = userArray.map((obj) => {
-    //   let individualName = obj.user;
-    //   userNames.push(individualName);
-    // });
-    // const displayedProfiles = userNames.map((name, idx) => {
     const displayedProfiles = this.state.users.map((obj, idx) => {
-      let individualName = obj.user;
-      console.log(individualName);
-      let individualRemaining = obj.remaining;
-      console.log(individualRemaining);
+      const individualName = obj.user;
+      const individualRemaining = obj.remaining;
       return (
         <div key={idx} className="userListDisplay">
-          {individualName}<br/>{individualRemaining} states to go
-          <button>View Profile</button>
+          {individualName}<br />{individualRemaining} license plates to go
+          <button onClick={this.consoler}>View Profile</button>
         </div>
       );
     });
     return (
-      <ul>
-        {displayedProfiles}
-      </ul>
+      <div>
+        <div>
+          <PostList
+            handleDelete={this.deletePost}
+            handlePublish={this.handlePublish}
+            posts={this.state.posts}
+          />
+          <Post
+            handleDelete={this.deletePost}
+            handlePublish={this.handlePublish}
+          />
+        </div>
+        <ul>
+          {displayedProfiles}
+        </ul>
+      </div>
     );
   }
 }
