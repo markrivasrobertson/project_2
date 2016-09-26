@@ -1,4 +1,6 @@
 import React from 'react';
+import request from 'superagent';
+import firebase from '../../firebase.config.js';
 
 const states = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL',
    'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME',
@@ -10,10 +12,35 @@ class NewPhoto extends React.Component {
   constructor() {
     super();
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.acceptURL = this.acceptURL.bind(this);
+    this.acceptPlate = this.acceptPlate.bind(this);
+    this.state = {
+      plate: '',
+      url: '',
+    };
+  }
+  acceptURL(e) {
+    const newURL = e.target.value;
+    this.setState({
+      url: newURL,
+    });
+  }
+  acceptPlate(e) {
+    const newPlate = e.target.value;
+    this.setState({
+      plate: newPlate,
+    });
   }
   handleSubmit(e) {
     e.preventDefault();
-    console.log('submit event without reload')
+    const currentUser = firebase.auth().currentUser.uid;
+    const url = `https://license-plate-scavenger-hunt.firebaseio.com/users/${currentUser}/urls/${this.state.plate}.json`;
+    const objURL = this.state.url;
+    console.log(url);
+    console.log(this.state);
+    request.patch(url)
+      .send({ url: objURL })
+      .then(console.log('patch state url sent'));
   }
   render() {
     const states = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL',
@@ -29,8 +56,8 @@ class NewPhoto extends React.Component {
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
-          <input type="text" name="url" />
-          <select>
+          <input type="text" name="url" onChange={this.acceptURL} />
+          <select onChange={this.acceptPlate}>
             {statesRemaining}
           </select>
           <button type="submit">Add Plate</button>
