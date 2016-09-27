@@ -1,4 +1,4 @@
-import { withRouter } from 'react-router';
+import { withRouter, Link } from 'react-router';
 import React from 'react';
 import firebase from '../../firebase.config.js';
 
@@ -10,6 +10,7 @@ class Main extends React.Component {
   constructor() {
     super();
     this.signOut = this.signOut.bind(this);
+    this.loggedInLinks = this.loggedInLinks.bind(this);
   }
   signOut() {
     firebase.auth().signOut().then(() => {
@@ -18,6 +19,17 @@ class Main extends React.Component {
     .then(() => {
       this.props.router.push('/');
     });
+  }
+  loggedInLinks() {
+    if (firebase.auth().currentUser === null) {
+      return (
+        <Link to="/login">Sign Out</Link>
+      );
+    } else {
+      return (
+        <Link to="/" onClick={this.signOut}>Sign Out</Link>
+      );
+    }
   }
   render() {
     if (firebase.auth().currentUser) {
@@ -31,6 +43,10 @@ class Main extends React.Component {
         <div id="main-content">
           {this.props.children}
         </div>
+        <br /><Link to="/new_photo" >Add a Photo</Link><br />
+        {
+          this.loggedInLinks()
+        }
       </div>
     );
   }

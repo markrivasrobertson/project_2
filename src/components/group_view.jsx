@@ -3,10 +3,7 @@ import React from 'react';
 import Post from './post.jsx';
 import PostList from './postlist.jsx';
 import firebase from '../../firebase.config.js';
-// const propTypes = {
-  // users: React.PropTypes.array.isRequired,
-  // message: React.PropTypes.string.isRequired,
-// };
+import UserView from './user_view.jsx';
 
 class GroupView extends React.Component {
   constructor() {
@@ -40,6 +37,7 @@ class GroupView extends React.Component {
       if (userData) {
         users = Object.keys(userData).map((id) => {
           return {
+            uid: id,
             user: userData[id].user_name,
             remaining: userData[id].remaining,
           };
@@ -111,10 +109,12 @@ class GroupView extends React.Component {
     const displayedProfiles = this.state.users.map((obj, idx) => {
       const individualName = obj.user;
       const individualRemaining = obj.remaining;
+      const individualId = obj.uid;
+      console.log(obj);
       return (
         <div key={idx} className="userListDisplay">
-          {individualName}<br />{individualRemaining} license plates to go
-          <button onClick={this.consoler}>View Profile</button>
+          <h1>{individualName}<br /><span>{individualRemaining}</span> license plates to go!</h1>
+          <UserView id={individualId} />
         </div>
       );
     });
@@ -139,16 +139,9 @@ class GroupView extends React.Component {
   }
 }
 
-// GroupView.propTypes = propTypes;
-
 export default GroupView;
 
-
 /*
-const userNames = this.props.users.map((userName, idx) => {
-  return (
-    <li key={idx}>{userName}</li>
-  );
-});
+<Link to="/:user" params={{ user: individualId }}>View Plates</Link>
 
 */

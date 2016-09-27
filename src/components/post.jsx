@@ -62,19 +62,21 @@ class Post extends React.Component {
         <form onSubmit={this.handleSubmit}>
           <input
             type="text"
+            className="postAuthor"
             name="author"
             value={this.state.localAuthor}
             onChange={this.handleEditOfAuthor}
           />
           <input
             type="text"
+            className="postContent"
             name="content"
             value={this.state.localContent}
             onChange={this.handleEditOfContent}
           />
           <br /><button type="submit">Comment</button>
         </form>
-        <br /><button onClick={this.handleDeleteClick}>X</button>
+        <button onClick={this.handleDeleteClick}>X</button>
       </div>
     );
   }
