@@ -21,6 +21,12 @@ class NewPhoto extends React.Component {
       url: '',
     };
   }
+  componentDidMount() {
+    const user = firebase.auth().currentUser.email;
+    if (user) {
+      console.log(user);
+    }
+  }
   acceptURL(e) {
     const newURL = e.target.value;
     this.setState({
@@ -50,7 +56,6 @@ class NewPhoto extends React.Component {
             });
         });
     })
-
   }
   render() {
     const states = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL',

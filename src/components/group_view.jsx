@@ -17,19 +17,20 @@ class GroupView extends React.Component {
     this.deletePost = this.deletePost.bind(this);
     this.publishPost = this.publishPost.bind(this);
     this.getUsers = this.getUsers.bind(this);
-    this.consoler = this.consoler.bind(this);
+    // this.consoler = this.consoler.bind(this);
   }
   componentWillMount() {
-    console.log('component pre mounting');
+    // console.log('component pre mounting');
     setTimeout(() => {
       this.getUsers();
     });
   }
-  consoler() {
-    console.log('clickety');
-  }
+  // no longer serving any noticeable function, since the buttons to which it was attached are gone
+  // consoler() {
+  //   console.log('clickety');
+  // }
   getUsers() {
-    console.log('get users called');
+    // console.log('get users called');
     const url = 'https://license-plate-scavenger-hunt.firebaseio.com/users/.json';
     request.get(url).then((response) => {
       let users = [];
@@ -46,43 +47,12 @@ class GroupView extends React.Component {
       this.setState({ users: users });
     });
   }
-  handlePublish({ id, content, author }) {
-    console.log('handle publish called');
-    if (id) {
-      this.updatePost({ id, content, author });
-    } else {
-      this.publishPost({ content, author });
-    }
-  }
-  updatePost({ id, content, author }) {
-    console.log('updatePost called');
-    const url = `https://license-plate-scavenger-hunt.firebaseio.com/posts/${id}.json`;
-    request.patch(url)
-      .send({ content, author })
-      .then(() => {
-        this.getPosts();
-      });
-  }
-  deletePost(id) {
-    console.log('deletePost called');
-    const url = `https://license-plate-scavenger-hunt.firebaseio.com/posts/${id}.json`;
-    console.log(url);
-    request.del(url)
-      .then(() => {
-        this.getPosts();
-      });
-  }
-  publishPost({ content, author }) {
-    console.log('publishPost called');
-    const url = 'https://license-plate-scavenger-hunt.firebaseio.com/posts/.json';
-    request.post(url)
-      .send({ content, author })
-      .then(() => {
-        this.getPosts();
-      });
+  componentDidMount() {
+    // why is this here again, when it was called in component will mount?
+    this.getPosts();
   }
   getPosts() {
-    console.log('getPosts called');
+    // console.log('getPosts called');
     const url = 'https://license-plate-scavenger-hunt.firebaseio.com/posts/.json';
     request.get(url)
       .then((response) => {
@@ -101,16 +71,48 @@ class GroupView extends React.Component {
         this.setState({ posts: posts });
       });
   }
-  componentDidMount() {
-    this.getPosts();
+  handlePublish({ id, content, author }) {
+    // console.log('handle publish called');
+    if (id) {
+      this.updatePost({ id, content, author });
+    } else {
+      this.publishPost({ content, author });
+    }
+  }
+  updatePost({ id, content, author }) {
+    // console.log('updatePost called');
+    const url = `https://license-plate-scavenger-hunt.firebaseio.com/posts/${id}.json`;
+    request.patch(url)
+      .send({ content, author })
+      .then(() => {
+        this.getPosts();
+      });
+  }
+  deletePost(id) {
+    // console.log('deletePost called');
+    const url = `https://license-plate-scavenger-hunt.firebaseio.com/posts/${id}.json`;
+    // console.log(url);
+    request.del(url)
+      .then(() => {
+        this.getPosts();
+      });
+  }
+  publishPost({ content, author }) {
+    // console.log('publishPost called');
+    const url = 'https://license-plate-scavenger-hunt.firebaseio.com/posts/.json';
+    request.post(url)
+      .send({ content, author })
+      .then(() => {
+        this.getPosts();
+      });
   }
   render() {
-    console.log(firebase.auth().currentUser.uid);
+    // console.log(firebase.auth().currentUser.uid);
     const displayedProfiles = this.state.users.map((obj, idx) => {
       const individualName = obj.user;
       const individualRemaining = obj.remaining;
       const individualId = obj.uid;
-      console.log(obj);
+      // console.log(obj);
       return (
         <div key={idx} className="userListDisplay">
           <h1>{individualName}<br /><span>{individualRemaining}</span> license plates to go!</h1>
@@ -143,5 +145,5 @@ export default GroupView;
 
 /*
 <Link to="/:user" params={{ user: individualId }}>View Plates</Link>
-
+this is seemingly useless, after the workaround with Kate
 */

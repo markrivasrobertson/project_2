@@ -28,6 +28,7 @@ class Login extends React.Component {
       .catch((err) => {
         const error = `${err.code} ${err.message}`;
         console.log(error);
+        return false;
       })
       .then(() => {
         console.log('login successful')

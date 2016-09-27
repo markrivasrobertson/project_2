@@ -2,6 +2,7 @@ body {
   background: #c0392b;
   color: #2c3e50;
   font-family: 'PT Sans Narrow', sans-serif;
+  /*Is box sizing doing anything?*/
   box-sizing: border-box;
 }
 img {
@@ -40,6 +41,7 @@ h1 {
     margin: 1rem;
 }
 .not-saved input {
+  /*this color is terrible, find another one*/
   background: #95a5a6;
 }
 #navbar, #main-content {

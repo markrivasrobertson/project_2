@@ -23,7 +23,7 @@ class Main extends React.Component {
   loggedInLinks() {
     if (firebase.auth().currentUser === null) {
       return (
-        <Link to="/login">Sign Out</Link>
+        <Link to="/login">Sign In</Link>
       );
     } else {
       return (
