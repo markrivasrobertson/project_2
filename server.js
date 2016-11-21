@@ -10,7 +10,7 @@ app.set('views', __dirname + '/src');
 app.set('view engine', 'react');
 
 app.get('/', function(request, response) {
-  response.render('src/static/index');
+  response.render('/static/index');
 });
 
 app.listen(app.get('port'), function() {
