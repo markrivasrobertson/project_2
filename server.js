@@ -7,7 +7,7 @@ app.set('port', (process.env.PORT || 5000));
 
 // views is directory for all template files
 app.set('views', __dirname + '/src');
-app.set('view engine', 'ejs');
+app.set('view engine', 'react');
 
 app.get('/', function(request, response) {
   response.render('src/static/index');
